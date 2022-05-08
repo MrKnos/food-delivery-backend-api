@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class RestaurantRepository {
@@ -39,6 +40,10 @@ public class RestaurantRepository {
 
     public List<RestaurantEntity> getRestaurants() {
         return restaurantJPA.findAll();
+    }
+
+    public Optional<RestaurantEntity> findRestaurantById(Long id) {
+        return restaurantJPA.findById(id);
     }
 
     @Transactional

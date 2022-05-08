@@ -3,8 +3,7 @@ package com.example.delivery.models;
 import com.example.delivery.entities.RestaurantEntity;
 import com.google.common.collect.ImmutableList;
 
-import javax.annotation.Nullable;
-
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -14,9 +13,7 @@ public record Restaurant(
         Location location,
         ImmutableList<OfficeHours> officeHours,
         RestaurantType type,
-        // TODO: Change ratingScroll to nullable
-        @Nullable
-        Double ratingScroll,
+        Optional<Double> ratingScroll,
         ImmutableList<Food> foods
 ) {
     public Restaurant(
@@ -24,15 +21,14 @@ public record Restaurant(
             Location location,
             ImmutableList<OfficeHours> officeHours,
             RestaurantType type,
-            @Nullable
-                    Double ratingScroll,
+            Optional<Double> ratingScroll,
             ImmutableList<Food> foods
     ) {
         this.name = checkNotNull(name);
         this.location = checkNotNull(location);
         this.officeHours = checkNotNull(officeHours);
         this.type = checkNotNull(type);
-        this.ratingScroll = checkNotNull(ratingScroll);
+        this.ratingScroll = ratingScroll;
         this.foods = checkNotNull(foods);
     }
 
@@ -42,7 +38,7 @@ public record Restaurant(
                 new Location(1234.0, 4321.0),
                 ImmutableList.of(),
                 RestaurantType.STREET,
-                80.0,
+                Optional.of(80.0),
                 ImmutableList.of(Food.fromMock())
         );
     }
@@ -56,7 +52,7 @@ public record Restaurant(
                 ),
                 ImmutableList.of(),
                 checkNotNull(entity.getType()),
-                entity.getRatingScroll(),
+                Optional.ofNullable(entity.getRatingScroll()),
                 ImmutableList.copyOf(
                         entity.getFoods()
                                 .stream()

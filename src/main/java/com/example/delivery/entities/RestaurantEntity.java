@@ -49,7 +49,7 @@ public class RestaurantEntity {
         entity.setLatitude(checkNotNull(restaurant.location().latitude()));
         entity.setLongitude(checkNotNull(restaurant.location().longitude()));
         entity.setType(checkNotNull(restaurant.type()));
-        entity.setRatingScroll(restaurant.ratingScroll());
+        entity.setRatingScroll(restaurant.ratingScroll().orElse(null));
         entity.setFoods(
                 checkNotNull(restaurant.foods())
                         .stream()

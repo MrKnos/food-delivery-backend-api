@@ -37,6 +37,10 @@ public class RestaurantRepository {
         restaurantJPA.deleteAll();
     }
 
+    public List<RestaurantEntity> getRestaurants() {
+        return restaurantJPA.findAll();
+    }
+
     @Transactional
     public RestaurantEntity createRestaurant(Restaurant restaurant) {
         final RestaurantEntity entity = RestaurantEntity.fromModel(restaurant);

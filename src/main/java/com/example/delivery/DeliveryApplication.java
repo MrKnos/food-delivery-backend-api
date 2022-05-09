@@ -1,6 +1,6 @@
 package com.example.delivery;
 
-import com.example.delivery.reopositories.RestaurantRepository;
+import com.example.delivery.services.RestaurantService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +15,7 @@ public class DeliveryApplication {
 
     @Bean
     public CommandLineRunner initial(
-            RestaurantRepository restaurantRepository
+            RestaurantService restaurantRepository
     ) {
         return (args) -> {
         };

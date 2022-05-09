@@ -3,6 +3,8 @@ package com.example.delivery.services;
 import com.example.delivery.entities.FoodEntity;
 import com.example.delivery.entities.FoodOptionEntity;
 import com.example.delivery.entities.RestaurantEntity;
+import com.example.delivery.exceptions.RestaurantNotFoundException;
+import com.example.delivery.models.Food;
 import com.example.delivery.models.Restaurant;
 import com.example.delivery.reopositories.FoodOptionRepository;
 import com.example.delivery.reopositories.FoodRepositoiry;
@@ -47,6 +49,19 @@ public class RestaurantService {
 
     public Optional<Restaurant> findRestaurantById(Long id) {
         return restaurantRepository.findById(id).map(Restaurant::fromEntity);
+    }
+
+    public ImmutableList<Food> listFoodsInRestaurant(Long restaurantId) {
+        final RestaurantEntity restaurant = restaurantRepository
+                .findById(restaurantId)
+                .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
+
+        return ImmutableList.copyOf(
+                restaurant.getFoods()
+                        .stream()
+                        .map(Food::fromEntity)
+                        .collect(Collectors.toList())
+        );
     }
 
     @Transactional

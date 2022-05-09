@@ -1,6 +1,7 @@
 package com.example.delivery.controllers;
 
-import com.example.delivery.exceptions.DataNotFoundException;
+import com.example.delivery.exceptions.RestaurantNotFoundException;
+import com.example.delivery.models.Food;
 import com.example.delivery.models.Restaurant;
 import com.example.delivery.responses.OkResponse;
 import com.example.delivery.services.RestaurantService;
@@ -26,10 +27,15 @@ public class RestaurantController {
     public OkResponse<Restaurant> getRestaurantById(@PathVariable Long id) {
         return OkResponse.of(
                 restaurantService.findRestaurantById(id).orElseThrow(
-                        () -> new DataNotFoundException(
-                                String.format("Restaurant id %s not found.", id)
-                        )
+                        () -> new RestaurantNotFoundException(id)
                 )
+        );
+    }
+
+    @GetMapping("/restaurants/{id}/foods")
+    public OkResponse<ImmutableList<Food>> getFoods(@PathVariable Long id) {
+        return OkResponse.of(
+                restaurantService.listFoodsInRestaurant(id)
         );
     }
 }

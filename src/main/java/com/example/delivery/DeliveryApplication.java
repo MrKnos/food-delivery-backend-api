@@ -1,6 +1,5 @@
 package com.example.delivery;
 
-import com.example.delivery.models.Restaurant;
 import com.example.delivery.reopositories.RestaurantRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,8 +18,6 @@ public class DeliveryApplication {
             RestaurantRepository restaurantRepository
     ) {
         return (args) -> {
-            restaurantRepository.deleteAllRestaurants();
-            restaurantRepository.createRestaurant(Restaurant.fromMock());
         };
     }
 

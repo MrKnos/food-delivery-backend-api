@@ -18,7 +18,12 @@ import java.util.Optional;
 @Repository
 public class RestaurantRepository {
 
-    public RestaurantRepository(RestaurantJPA restaurantJPA, FoodJPA foodJPA, FoodOptionJPA foodOptionJPA, VariousJPA variousJPA) {
+    public RestaurantRepository(
+            RestaurantJPA restaurantJPA,
+            FoodJPA foodJPA,
+            FoodOptionJPA foodOptionJPA,
+            VariousJPA variousJPA
+    ) {
         this.restaurantJPA = restaurantJPA;
         this.foodJPA = foodJPA;
         this.foodOptionJPA = foodOptionJPA;

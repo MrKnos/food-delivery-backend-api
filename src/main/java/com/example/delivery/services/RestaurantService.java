@@ -1,5 +1,6 @@
 package com.example.delivery.services;
 
+import com.example.delivery.exceptions.DataNotFoundException;
 import com.example.delivery.models.Restaurant;
 import com.example.delivery.reopositories.RestaurantRepository;
 import com.google.common.collect.ImmutableList;
@@ -27,11 +28,16 @@ public class RestaurantService {
     }
 
     public Restaurant getRestaurantById(Long id) {
-        // TODO: Throw DataNotFoundException
-        return findRestaurantById(id).orElseThrow();
+        return findRestaurantById(id).orElseThrow(
+                () -> new DataNotFoundException(
+                        String.format("Restaurant id %s not found.", id)
+                )
+        );
     }
 
     public Optional<Restaurant> findRestaurantById(Long id) {
-        return restaurantRepository.findRestaurantById(id).map(Restaurant::fromEntity);
+        return restaurantRepository
+                .findRestaurantById(id)
+                .map(Restaurant::fromEntity);
     }
 }

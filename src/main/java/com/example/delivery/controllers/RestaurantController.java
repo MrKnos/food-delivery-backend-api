@@ -1,6 +1,5 @@
 package com.example.delivery.controllers;
 
-import com.example.delivery.exceptions.RestaurantNotFoundException;
 import com.example.delivery.models.Food;
 import com.example.delivery.models.Restaurant;
 import com.example.delivery.responses.OkResponse;
@@ -25,11 +24,7 @@ public class RestaurantController {
 
     @GetMapping("/restaurants/{id}")
     public OkResponse<Restaurant> getRestaurant(@PathVariable Long id) {
-        return OkResponse.of(
-                restaurantService.findRestaurantById(id).orElseThrow(
-                        () -> new RestaurantNotFoundException(id)
-                )
-        );
+        return OkResponse.of(restaurantService.getRestaurantById(id));
     }
 
     @GetMapping("/restaurants/{id}/foods")

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -47,20 +46,16 @@ public class RestaurantService {
         );
     }
 
-    public Optional<Restaurant> findRestaurantById(Long id) {
-        return restaurantRepository.findById(id).map(Restaurant::fromEntity);
+    public Restaurant getRestaurantById(Long id) {
+        return restaurantRepository
+                .findById(id)
+                .map(Restaurant::fromEntity)
+                .orElseThrow(() -> new RestaurantNotFoundException(id));
     }
 
     public ImmutableList<Food> listFoodsInRestaurant(Long restaurantId) {
-        final RestaurantEntity restaurant = restaurantRepository
-                .findById(restaurantId)
-                .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
-
         return ImmutableList.copyOf(
-                restaurant.getFoods()
-                        .stream()
-                        .map(Food::fromEntity)
-                        .collect(Collectors.toList())
+                getRestaurantById(restaurantId).foods()
         );
     }
 

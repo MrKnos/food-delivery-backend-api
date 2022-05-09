@@ -59,11 +59,11 @@ public class RestaurantService {
     }
 
     @Transactional
-    RestaurantEntity createRestaurant(Restaurant restaurant) {
+    public RestaurantEntity createRestaurant(Restaurant restaurant) {
         final RestaurantEntity entity = RestaurantEntity.fromModel(restaurant);
         final RestaurantEntity createdRestaurant = restaurantRepository.save(entity);
 
-        createFoods(createdRestaurant);
+        createdRestaurant.setFoods(createFoods(createdRestaurant));
 
         return createdRestaurant;
     }
@@ -73,11 +73,11 @@ public class RestaurantService {
         final List<FoodEntity> foods = restaurant.getFoods();
 
         foods.forEach(food -> food.setRestaurant(restaurant));
-        final List<FoodEntity> createdFood = foodRepositoiry.saveAll(foods);
+        final List<FoodEntity> createdFoods = foodRepositoiry.saveAll(foods);
 
-        createdFood.forEach(this::createFoodOptions);
+        createdFoods.forEach(food -> food.setOptions(createFoodOptions(food)));
 
-        return createdFood;
+        return createdFoods;
     }
 
     @Transactional
@@ -86,7 +86,7 @@ public class RestaurantService {
         options.forEach(option -> option.setFood(food));
 
         final List<FoodOptionEntity> createdOptions = foodOptionRepository.saveAll(options);
-        createdOptions.forEach(this::createVarious);
+        createdOptions.forEach(option -> option.setVarious(createVarious(option)));
 
         return createdOptions;
     }

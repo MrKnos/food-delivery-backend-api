@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public record Food(
+        Optional<Long> id,
         String name,
         String description,
         Double price,
@@ -18,12 +19,14 @@ public record Food(
         ImmutableList<FoodOption> options
 ) {
     public Food(
+            Optional<Long> id,
             String name,
             String description,
             Double price,
             Optional<Double> originalPrice,
             ImmutableList<FoodOption> options
     ) {
+        this.id = id;
         this.name = checkNotNull(name);
         this.description = checkNotNull(description);
         this.price = checkNotNull(price);
@@ -33,6 +36,7 @@ public record Food(
 
     public static Food fromEntity(FoodEntity entity) {
         return new Food(
+                Optional.of(entity.getId()),
                 checkNotNull(entity.getName()),
                 checkNotNull(entity.getDescription()),
                 checkNotNull(entity.getPrice()),
@@ -50,6 +54,7 @@ public record Food(
         final Double randomPrice = randomPrice();
 
         return new Food(
+                Optional.empty(),
                 "Tom Yum",
                 "Thai spicy soup",
                 randomPrice,

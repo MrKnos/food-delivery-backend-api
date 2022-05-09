@@ -1,6 +1,7 @@
 package com.example.delivery.controllers;
 
 import com.example.delivery.models.Restaurant;
+import com.example.delivery.responses.OkResponse;
 import com.example.delivery.services.RestaurantService;
 import com.google.common.collect.ImmutableList;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,12 +17,12 @@ public class RestaurantController {
     RestaurantService restaurantService;
 
     @GetMapping("/restaurants")
-    public ImmutableList<Restaurant> getRestaurants() {
-        return restaurantService.getRestaurants();
+    public OkResponse<ImmutableList<Restaurant>> getRestaurants() {
+        return OkResponse.of(restaurantService.getRestaurants());
     }
 
     @GetMapping("/restaurants/{id}")
-    public Restaurant getRestaurantById(@PathVariable Long id) {
-        return restaurantService.getRestaurantById(id);
+    public OkResponse<Restaurant> getRestaurantById(@PathVariable Long id) {
+        return OkResponse.of(restaurantService.getRestaurantById(id));
     }
 }

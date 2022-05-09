@@ -35,17 +35,36 @@ public class FoodOptionEntity {
     @OneToMany(mappedBy = "option")
     private List<VariousEntity> various;
 
-    public static FoodOptionEntity fromModel(FoodOption option) {
+    public static FoodOptionEntity of(
+            Long id,
+            FoodEntity food,
+            String name,
+            OptionSelectionType selectionType,
+            List<VariousEntity> various
+    ) {
         final FoodOptionEntity entity = new FoodOptionEntity();
+        entity.setId(id);
+        entity.setFood(food);
+        entity.setName(name);
+        entity.setSelectionType(selectionType);
+        entity.setVarious(various);
 
-        entity.setName(checkNotNull(option.name()));
-        entity.setSelectionType(checkNotNull(option.type()));
-        entity.setVarious(
+        return entity;
+    }
+
+    public static FoodOptionEntity fromModel(FoodOption option) {
+        final FoodOptionEntity entity = FoodOptionEntity.of(
+                null,
+                null,
+                checkNotNull(option.name()),
+                checkNotNull(option.type()),
                 checkNotNull(option.various())
                         .stream()
                         .map(VariousEntity::fromModel)
                         .collect(Collectors.toList())
         );
+
+        entity.getVarious().forEach(various -> various.setOption(entity));
 
         return entity;
     }

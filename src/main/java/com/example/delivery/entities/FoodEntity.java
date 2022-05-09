@@ -43,19 +43,42 @@ public class FoodEntity {
     @OneToMany(mappedBy = "food")
     private List<FoodOptionEntity> options;
 
-    public static FoodEntity fromModel(Food food) {
+    public static FoodEntity of(
+            Long id,
+            RestaurantEntity restaurant,
+            String name,
+            String description,
+            Double price,
+            Double originalPrice,
+            List<FoodOptionEntity> options
+    ) {
         final FoodEntity entity = new FoodEntity();
+        entity.setId(id);
+        entity.setRestaurant(restaurant);
+        entity.setName(checkNotNull(name));
+        entity.setDescription(description);
+        entity.setPrice(checkNotNull(price));
+        entity.setOriginalPrice(originalPrice);
+        entity.setOptions(checkNotNull(options));
 
-        entity.setName(checkNotNull(food.name()));
-        entity.setDescription(food.description());
-        entity.setPrice(checkNotNull(food.price()));
-        entity.setOriginalPrice(food.originalPrice().orElse(null));
-        entity.setOptions(
+        return entity;
+    }
+
+    public static FoodEntity fromModel(Food food) {
+        final FoodEntity entity = FoodEntity.of(
+                null,
+                null,
+                checkNotNull(food.name()),
+                food.description(),
+                checkNotNull(food.price()),
+                food.originalPrice().orElse(null),
                 checkNotNull(food.options())
                         .stream()
                         .map(FoodOptionEntity::fromModel)
                         .collect(Collectors.toList())
         );
+
+        entity.options.forEach(option -> option.setFood(entity));
 
         return entity;
     }

@@ -19,6 +19,7 @@ public class DeliveryApplication {
             RestaurantService restaurantService
     ) {
         return (args) -> {
+            restaurantService.deleteAllRestaurants();
             restaurantService.createRestaurant(Restaurant.fromMock());
         };
     }

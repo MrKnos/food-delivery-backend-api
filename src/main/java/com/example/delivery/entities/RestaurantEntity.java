@@ -42,20 +42,42 @@ public class RestaurantEntity {
     @OneToMany(mappedBy = "restaurant")
     private List<FoodEntity> foods;
 
-    public static RestaurantEntity fromModel(Restaurant restaurant) {
+    public static RestaurantEntity of(
+            Long id,
+            String name,
+            Double latitude,
+            Double longitude,
+            RestaurantType type,
+            Double ratingScroll,
+            List<FoodEntity> foods
+    ) {
         final RestaurantEntity entity = new RestaurantEntity();
+        entity.setId(id);
+        entity.setName(checkNotNull(name));
+        entity.setLatitude(checkNotNull(latitude));
+        entity.setLongitude(checkNotNull(longitude));
+        entity.setType(checkNotNull(type));
+        entity.setRatingScroll(ratingScroll);
+        entity.setFoods(foods);
 
-        entity.setName(checkNotNull(restaurant.name()));
-        entity.setLatitude(checkNotNull(restaurant.location().latitude()));
-        entity.setLongitude(checkNotNull(restaurant.location().longitude()));
-        entity.setType(checkNotNull(restaurant.type()));
-        entity.setRatingScroll(restaurant.ratingScroll().orElse(null));
-        entity.setFoods(
+        return entity;
+    }
+
+    public static RestaurantEntity fromModel(Restaurant restaurant) {
+        final RestaurantEntity entity = RestaurantEntity.of(
+                null,
+                checkNotNull(restaurant.name()),
+                checkNotNull(restaurant.location().latitude()),
+                checkNotNull(restaurant.location().longitude()),
+                checkNotNull(restaurant.type()),
+                restaurant.ratingScroll().orElse(null),
                 checkNotNull(restaurant.foods())
                         .stream()
                         .map(FoodEntity::fromModel)
                         .collect(Collectors.toList())
         );
+
+        entity.foods.forEach(food -> food.setRestaurant(entity));
 
         return entity;
     }

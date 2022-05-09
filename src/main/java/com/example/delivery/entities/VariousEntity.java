@@ -29,12 +29,27 @@ public class VariousEntity {
     @Column(name = "price")
     private Double price;
 
-    public static VariousEntity fromModel(Various various) {
+    public static VariousEntity of(
+            Long id,
+            FoodOptionEntity option,
+            String name,
+            Double price
+    ) {
         final VariousEntity entity = new VariousEntity();
-
-        entity.setName(checkNotNull(various.name()));
-        entity.setPrice(checkNotNull(various.price()));
+        entity.setId(id);
+        entity.setOption(option);
+        entity.setName(name);
+        entity.setPrice(price);
 
         return entity;
+    }
+
+    public static VariousEntity fromModel(Various various) {
+        return VariousEntity.of(
+                null,
+                null,
+                checkNotNull(various.name()),
+                checkNotNull(various.price())
+        );
     }
 }

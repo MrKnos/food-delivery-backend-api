@@ -3,7 +3,6 @@ package com.example.delivery.services;
 import com.example.delivery.entities.FoodEntity;
 import com.example.delivery.entities.FoodOptionEntity;
 import com.example.delivery.entities.RestaurantEntity;
-import com.example.delivery.entities.VariousEntity;
 import com.example.delivery.models.Restaurant;
 import com.example.delivery.reopositories.FoodOptionRepository;
 import com.example.delivery.reopositories.FoodRepositoiry;
@@ -60,41 +59,28 @@ public class RestaurantService {
 
     @Transactional
     public RestaurantEntity createRestaurant(Restaurant restaurant) {
-        final RestaurantEntity entity = RestaurantEntity.fromModel(restaurant);
-        final RestaurantEntity createdRestaurant = restaurantRepository.save(entity);
+        final RestaurantEntity createdRestaurant = restaurantRepository.save(
+                RestaurantEntity.fromModel(restaurant)
+        );
 
-        createdRestaurant.setFoods(createFoods(createdRestaurant));
+        final List<FoodEntity> createdFoods = foodRepositoiry.saveAll(
+                createdRestaurant.getFoods()
+        );
+
+        final List<FoodOptionEntity> createdOptions = foodOptionRepository.saveAll(
+                createdFoods
+                        .stream()
+                        .flatMap(food -> food.getOptions().stream())
+                        .toList()
+        );
+
+        variousRepository.saveAll(
+                createdOptions
+                        .stream()
+                        .flatMap(option -> option.getVarious().stream())
+                        .toList()
+        );
 
         return createdRestaurant;
-    }
-
-    @Transactional
-    List<FoodEntity> createFoods(RestaurantEntity restaurant) {
-        final List<FoodEntity> foods = restaurant.getFoods();
-
-        foods.forEach(food -> food.setRestaurant(restaurant));
-        final List<FoodEntity> createdFoods = foodRepositoiry.saveAll(foods);
-
-        createdFoods.forEach(food -> food.setOptions(createFoodOptions(food)));
-
-        return createdFoods;
-    }
-
-    @Transactional
-    List<FoodOptionEntity> createFoodOptions(FoodEntity food) {
-        final List<FoodOptionEntity> options = food.getOptions();
-        options.forEach(option -> option.setFood(food));
-
-        final List<FoodOptionEntity> createdOptions = foodOptionRepository.saveAll(options);
-        createdOptions.forEach(option -> option.setVarious(createVarious(option)));
-
-        return createdOptions;
-    }
-
-    List<VariousEntity> createVarious(FoodOptionEntity option) {
-        final List<VariousEntity> various = option.getVarious();
-        various.forEach(_various -> _various.setOption(option));
-
-        return variousRepository.saveAll(various);
     }
 }

@@ -24,7 +24,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/restaurants/{id}")
-    public OkResponse<Restaurant> getRestaurantById(@PathVariable Long id) {
+    public OkResponse<Restaurant> getRestaurant(@PathVariable Long id) {
         return OkResponse.of(
                 restaurantService.findRestaurantById(id).orElseThrow(
                         () -> new RestaurantNotFoundException(id)

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public record Restaurant(
+        Optional<Long> id,
         String name,
         Location location,
         ImmutableList<OfficeHours> officeHours,
@@ -17,6 +18,7 @@ public record Restaurant(
         ImmutableList<Food> foods
 ) {
     public Restaurant(
+            Optional<Long> id,
             String name,
             Location location,
             ImmutableList<OfficeHours> officeHours,
@@ -24,6 +26,7 @@ public record Restaurant(
             Optional<Double> ratingScroll,
             ImmutableList<Food> foods
     ) {
+        this.id = id;
         this.name = checkNotNull(name);
         this.location = checkNotNull(location);
         this.officeHours = checkNotNull(officeHours);
@@ -34,6 +37,7 @@ public record Restaurant(
 
     public static Restaurant fromMock() {
         return new Restaurant(
+                Optional.empty(),
                 "Knos",
                 new Location(1234.0, 4321.0),
                 ImmutableList.of(),
@@ -45,6 +49,7 @@ public record Restaurant(
 
     public static Restaurant fromEntity(RestaurantEntity entity) {
         return new Restaurant(
+                Optional.of(entity.getId()),
                 checkNotNull(entity.getName()),
                 new Location(
                         checkNotNull(entity.getLatitude()),

@@ -40,7 +40,7 @@ public class FoodEntity {
     @Column(name = "originalPrice")
     private Double originalPrice;
 
-    @OneToMany(mappedBy = "food", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
     private List<FoodOptionEntity> options;
 
     public static FoodEntity of(

@@ -24,7 +24,7 @@ public record FoodOption(
 
     public static FoodOption fromMock() {
         return new FoodOption(
-                "Meat type",
+                "Meat tags",
                 OptionSelectionType.SINGLE,
                 ImmutableList.of(Various.fromMock())
         );

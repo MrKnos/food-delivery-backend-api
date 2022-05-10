@@ -2,7 +2,7 @@ package com.example.delivery.entities;
 
 import com.example.delivery.forms.RestaurantForm;
 import com.example.delivery.models.Restaurant;
-import com.example.delivery.models.RestaurantType;
+import com.example.delivery.models.RestaurantTag;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,8 +34,8 @@ public class RestaurantEntity {
     @Column(name = "longitude")
     private Double longitude;
 
-    @Column(name = "type")
-    private RestaurantType type;
+    @Column(name = "tag")
+    private RestaurantTag tag;
 
     @Nullable
     @Column(name = "rating_scroll")
@@ -49,7 +49,7 @@ public class RestaurantEntity {
             String name,
             Double latitude,
             Double longitude,
-            RestaurantType type,
+            RestaurantTag type,
             Double ratingScroll,
             List<FoodEntity> foods
     ) {
@@ -58,7 +58,7 @@ public class RestaurantEntity {
         entity.setName(name);
         entity.setLatitude(latitude);
         entity.setLongitude(longitude);
-        entity.setType(type);
+        entity.setTag(type);
         entity.setRatingScroll(ratingScroll);
         entity.setFoods(foods);
 
@@ -71,7 +71,8 @@ public class RestaurantEntity {
                 checkNotNull(restaurant.name()),
                 checkNotNull(restaurant.location().latitude()),
                 checkNotNull(restaurant.location().longitude()),
-                checkNotNull(restaurant.type()),
+                // TODO: Set tags
+                checkNotNull(restaurant.tags().get(0)),
                 restaurant.ratingScroll().orElse(null),
                 checkNotNull(restaurant.foods())
                         .stream()

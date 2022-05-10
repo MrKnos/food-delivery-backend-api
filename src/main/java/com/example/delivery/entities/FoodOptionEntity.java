@@ -32,7 +32,7 @@ public class FoodOptionEntity {
     @Column(name = "selection_type")
     private OptionSelectionType selectionType;
 
-    @OneToMany(mappedBy = "option")
+    @OneToMany(mappedBy = "option", cascade = CascadeType.REMOVE)
     private List<VariousEntity> various;
 
     public static FoodOptionEntity of(

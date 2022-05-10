@@ -62,9 +62,15 @@ public class RestaurantService {
     @Transactional
     public void deleteAllRestaurants() {
         variousRepository.deleteAll();
-        foodOptionRepository.deleteAll();
-        foodRepositoiry.deleteAll();
-        restaurantRepository.deleteAll();
+    }
+
+    @Transactional
+    public void deleteRestaurantById(Long id) {
+        if (!restaurantRepository.existsById(id)) {
+            throw new RestaurantNotFoundException(id);
+        }
+
+        restaurantRepository.deleteById(id);
     }
 
     @Transactional

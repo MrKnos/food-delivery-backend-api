@@ -1,5 +1,6 @@
 package com.example.delivery.entities;
 
+import com.example.delivery.forms.RestaurantForm;
 import com.example.delivery.models.Restaurant;
 import com.example.delivery.models.RestaurantType;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 
 import javax.annotation.Nullable;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,10 +55,10 @@ public class RestaurantEntity {
     ) {
         final RestaurantEntity entity = new RestaurantEntity();
         entity.setId(id);
-        entity.setName(checkNotNull(name));
-        entity.setLatitude(checkNotNull(latitude));
-        entity.setLongitude(checkNotNull(longitude));
-        entity.setType(checkNotNull(type));
+        entity.setName(name);
+        entity.setLatitude(latitude);
+        entity.setLongitude(longitude);
+        entity.setType(type);
         entity.setRatingScroll(ratingScroll);
         entity.setFoods(foods);
 
@@ -75,6 +77,22 @@ public class RestaurantEntity {
                         .stream()
                         .map(FoodEntity::fromModel)
                         .collect(Collectors.toList())
+        );
+
+        entity.foods.forEach(food -> food.setRestaurant(entity));
+
+        return entity;
+    }
+
+    public static RestaurantEntity fromForm(RestaurantForm form) {
+        final RestaurantEntity entity = RestaurantEntity.of(
+                null,
+                checkNotNull(form.name()),
+                checkNotNull(form.location().latitude()),
+                checkNotNull(form.location().longitude()),
+                null,
+                null,
+                new ArrayList<>()
         );
 
         entity.foods.forEach(food -> food.setRestaurant(entity));

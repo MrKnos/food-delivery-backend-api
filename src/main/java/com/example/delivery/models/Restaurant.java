@@ -13,6 +13,7 @@ public record Restaurant(
         String name,
         Location location,
         ImmutableList<OfficeHours> officeHours,
+        // TODO: Change to list of restaurant tag
         RestaurantType type,
         Optional<Double> ratingScroll,
         ImmutableList<Food> foods
@@ -30,7 +31,7 @@ public record Restaurant(
         this.name = checkNotNull(name);
         this.location = checkNotNull(location);
         this.officeHours = checkNotNull(officeHours);
-        this.type = checkNotNull(type);
+        this.type = type;
         this.ratingScroll = ratingScroll;
         this.foods = checkNotNull(foods);
     }
@@ -56,7 +57,7 @@ public record Restaurant(
                         checkNotNull(entity.getLongitude())
                 ),
                 ImmutableList.of(),
-                checkNotNull(entity.getType()),
+                entity.getType(),
                 Optional.ofNullable(entity.getRatingScroll()),
                 ImmutableList.copyOf(
                         entity.getFoods()

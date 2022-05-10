@@ -39,7 +39,7 @@ public class RestaurantEntity {
     @Column(name = "rating_scroll")
     private Double ratingScroll;
 
-    @OneToMany(mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.REMOVE)
     private List<FoodEntity> foods;
 
     public static RestaurantEntity of(

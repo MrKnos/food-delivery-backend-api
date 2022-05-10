@@ -5,6 +5,7 @@ import com.example.delivery.models.Restaurant;
 import com.example.delivery.responses.OkResponse;
 import com.example.delivery.services.RestaurantService;
 import com.google.common.collect.ImmutableList;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,5 +33,11 @@ public class RestaurantController {
         return OkResponse.of(
                 restaurantService.listFoodsInRestaurant(id)
         );
+    }
+
+    @DeleteMapping("/restaurants/{id}")
+    public OkResponse<String> deleteRestaurant(@PathVariable Long id) {
+        restaurantService.deleteRestaurantById(id);
+        return OkResponse.of("Success");
     }
 }

@@ -1,7 +1,5 @@
 package com.example.delivery.services;
 
-import com.example.delivery.entities.FoodEntity;
-import com.example.delivery.entities.FoodOptionEntity;
 import com.example.delivery.entities.RestaurantEntity;
 import com.example.delivery.exceptions.RestaurantNotFoundException;
 import com.example.delivery.models.Food;
@@ -13,8 +11,6 @@ import com.example.delivery.reopositories.VariousRepository;
 import com.google.common.collect.ImmutableList;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
@@ -59,12 +55,10 @@ public class RestaurantService {
         );
     }
 
-    @Transactional
     public void deleteAllRestaurants() {
-        variousRepository.deleteAll();
+        restaurantRepository.deleteAll();
     }
 
-    @Transactional
     public void deleteRestaurantById(Long id) {
         if (!restaurantRepository.existsById(id)) {
             throw new RestaurantNotFoundException(id);
@@ -73,30 +67,9 @@ public class RestaurantService {
         restaurantRepository.deleteById(id);
     }
 
-    @Transactional
     public RestaurantEntity createRestaurant(Restaurant restaurant) {
-        final RestaurantEntity createdRestaurant = restaurantRepository.save(
+        return restaurantRepository.save(
                 RestaurantEntity.fromModel(restaurant)
         );
-
-        final List<FoodEntity> createdFoods = foodRepositoiry.saveAll(
-                createdRestaurant.getFoods()
-        );
-
-        final List<FoodOptionEntity> createdOptions = foodOptionRepository.saveAll(
-                createdFoods
-                        .stream()
-                        .flatMap(food -> food.getOptions().stream())
-                        .toList()
-        );
-
-        variousRepository.saveAll(
-                createdOptions
-                        .stream()
-                        .flatMap(option -> option.getVarious().stream())
-                        .toList()
-        );
-
-        return createdRestaurant;
     }
 }

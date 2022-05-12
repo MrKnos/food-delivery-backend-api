@@ -13,35 +13,17 @@ public record Restaurant(
         String name,
         Location location,
         ImmutableList<OfficeHours> officeHours,
-        RestaurantType type,
+        ImmutableList<RestaurantTag> tags,
         Optional<Double> ratingScroll,
         ImmutableList<Food> foods
 ) {
-    public Restaurant(
-            Optional<Long> id,
-            String name,
-            Location location,
-            ImmutableList<OfficeHours> officeHours,
-            RestaurantType type,
-            Optional<Double> ratingScroll,
-            ImmutableList<Food> foods
-    ) {
-        this.id = id;
-        this.name = checkNotNull(name);
-        this.location = checkNotNull(location);
-        this.officeHours = checkNotNull(officeHours);
-        this.type = checkNotNull(type);
-        this.ratingScroll = ratingScroll;
-        this.foods = checkNotNull(foods);
-    }
-
     public static Restaurant fromMock() {
         return new Restaurant(
                 Optional.empty(),
                 "Knos",
                 new Location(1234.0, 4321.0),
                 ImmutableList.of(),
-                RestaurantType.STREET,
+                ImmutableList.of(RestaurantTag.STREET_FOOD),
                 Optional.of(80.0),
                 ImmutableList.of(Food.fromMock())
         );
@@ -56,7 +38,7 @@ public record Restaurant(
                         checkNotNull(entity.getLongitude())
                 ),
                 ImmutableList.of(),
-                checkNotNull(entity.getType()),
+                ImmutableList.of(),
                 Optional.ofNullable(entity.getRatingScroll()),
                 ImmutableList.copyOf(
                         entity.getFoods()

@@ -2,6 +2,7 @@ package com.example.delivery.services;
 
 import com.example.delivery.entities.RestaurantEntity;
 import com.example.delivery.exceptions.RestaurantNotFoundException;
+import com.example.delivery.forms.RestaurantForm;
 import com.example.delivery.models.Food;
 import com.example.delivery.models.Restaurant;
 import com.example.delivery.reopositories.FoodOptionRepository;
@@ -67,9 +68,11 @@ public class RestaurantService {
         restaurantRepository.deleteById(id);
     }
 
-    public RestaurantEntity createRestaurant(Restaurant restaurant) {
-        return restaurantRepository.save(
-                RestaurantEntity.fromModel(restaurant)
+    public Restaurant createRestaurantFromForm(RestaurantForm form) {
+        final RestaurantEntity createdRestaurant = restaurantRepository.save(
+                RestaurantEntity.fromForm(form)
         );
+
+        return Restaurant.fromEntity(createdRestaurant);
     }
 }

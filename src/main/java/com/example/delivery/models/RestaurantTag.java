@@ -1,6 +1,6 @@
 package com.example.delivery.models;
 
-public enum RestaurantType {
-    STREET,
+public enum RestaurantTag {
+    STREET_FOOD,
     EXCLUSIVE
 }

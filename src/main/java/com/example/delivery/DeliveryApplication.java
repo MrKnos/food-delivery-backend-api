@@ -1,6 +1,6 @@
 package com.example.delivery;
 
-import com.example.delivery.models.Restaurant;
+import com.example.delivery.forms.RestaurantForm;
 import com.example.delivery.services.RestaurantService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,7 +20,7 @@ public class DeliveryApplication {
     ) {
         return (args) -> {
             restaurantService.deleteAllRestaurants();
-            restaurantService.createRestaurant(Restaurant.fromMock());
+            restaurantService.createRestaurantFromForm(RestaurantForm.fromMock());
         };
     }
 

@@ -1,14 +1,12 @@
 package com.example.delivery.controllers;
 
+import com.example.delivery.forms.RestaurantForm;
 import com.example.delivery.models.Food;
 import com.example.delivery.models.Restaurant;
 import com.example.delivery.responses.OkResponse;
 import com.example.delivery.services.RestaurantService;
 import com.google.common.collect.ImmutableList;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class RestaurantController {
@@ -17,6 +15,11 @@ public class RestaurantController {
     }
 
     RestaurantService restaurantService;
+
+    @PostMapping("/restaurant")
+    public OkResponse<Restaurant> createRestaurant(@RequestBody RestaurantForm form) {
+        return OkResponse.of(restaurantService.createRestaurantFromForm(form));
+    }
 
     @GetMapping("/restaurants")
     public OkResponse<ImmutableList<Restaurant>> getRestaurants() {
@@ -30,9 +33,7 @@ public class RestaurantController {
 
     @GetMapping("/restaurants/{id}/foods")
     public OkResponse<ImmutableList<Food>> getFoods(@PathVariable Long id) {
-        return OkResponse.of(
-                restaurantService.listFoodsInRestaurant(id)
-        );
+        return OkResponse.of(restaurantService.listFoodsInRestaurant(id));
     }
 
     @DeleteMapping("/restaurants/{id}")

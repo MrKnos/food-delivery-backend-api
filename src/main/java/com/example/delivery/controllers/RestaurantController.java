@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableList;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/restaurants")
 public class RestaurantController {
     public RestaurantController(RestaurantService restaurantService) {
         this.restaurantService = restaurantService;
@@ -17,27 +18,27 @@ public class RestaurantController {
 
     RestaurantService restaurantService;
 
-    @PostMapping("/restaurant")
-    public OkResponse<Restaurant> createRestaurant(@RequestBody RestaurantForm form) {
-        return OkResponse.of(restaurantService.createRestaurantFromForm(form));
-    }
-
-    @GetMapping("/restaurants")
+    @GetMapping
     public OkResponse<ImmutableList<Restaurant>> getRestaurants() {
         return OkResponse.of(restaurantService.getRestaurants());
     }
 
-    @GetMapping("/restaurants/{id}")
+    @PostMapping
+    public OkResponse<Restaurant> createRestaurant(@RequestBody RestaurantForm form) {
+        return OkResponse.of(restaurantService.createRestaurantFromForm(form));
+    }
+
+    @GetMapping("/{id}")
     public OkResponse<Restaurant> getRestaurant(@PathVariable Long id) {
         return OkResponse.of(restaurantService.getRestaurantById(id));
     }
 
-    @GetMapping("/restaurants/{id}/foods")
+    @GetMapping("/{id}/foods")
     public OkResponse<ImmutableList<Food>> getFoods(@PathVariable Long id) {
         return OkResponse.of(restaurantService.listFoodsInRestaurant(id));
     }
 
-    @DeleteMapping("/restaurants/{id}")
+    @DeleteMapping("/{id}")
     public OkResponse<String> deleteRestaurant(@PathVariable Long id) {
         restaurantService.deleteRestaurantById(id);
         return OkResponse.of(ConstantMessages.SUCCESS);

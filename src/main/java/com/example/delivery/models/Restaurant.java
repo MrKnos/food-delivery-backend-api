@@ -38,7 +38,11 @@ public record Restaurant(
                         checkNotNull(entity.getLongitude())
                 ),
                 ImmutableList.of(),
-                ImmutableList.of(),
+                ImmutableList.copyOf(
+                        entity.getTags()
+                                .stream().map(RestaurantTag::fromEntity)
+                                .collect(Collectors.toList())
+                ),
                 Optional.ofNullable(entity.getRatingScroll()),
                 ImmutableList.copyOf(
                         entity.getFoods()
@@ -47,5 +51,17 @@ public record Restaurant(
                                 .collect(Collectors.toList())
                 )
         );
+    }
+
+    public Boolean predicate(RestaurantPredicate predicate) {
+        if (predicate.tag().isPresent()) {
+            return hasTag(predicate.tag().get());
+        }
+
+        return true;
+    }
+
+    public Boolean hasTag(RestaurantTag tag) {
+        return tags().contains(tag);
     }
 }

@@ -5,10 +5,12 @@ import com.example.delivery.exceptions.RestaurantNotFoundException;
 import com.example.delivery.forms.RestaurantForm;
 import com.example.delivery.models.Food;
 import com.example.delivery.models.Restaurant;
+import com.example.delivery.models.RestaurantPredicate;
 import com.example.delivery.reopositories.FoodOptionRepository;
 import com.example.delivery.reopositories.FoodRepositoiry;
 import com.example.delivery.reopositories.RestaurantRepository;
 import com.example.delivery.reopositories.VariousRepository;
+import com.example.delivery.requests.RestaurantPredicateRequest;
 import com.google.common.collect.ImmutableList;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,18 @@ public class RestaurantService {
                 restaurantRepository.findAll()
                         .stream()
                         .map(Restaurant::fromEntity)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    public ImmutableList<Restaurant> filterRestaurants(
+            RestaurantPredicateRequest predicate
+    ) {
+        final RestaurantPredicate _predicate = RestaurantPredicate.fromRequest(predicate);
+
+        return ImmutableList.copyOf(
+                getRestaurants()
+                        .stream().filter(restaurant -> restaurant.predicate(_predicate))
                         .collect(Collectors.toList())
         );
     }

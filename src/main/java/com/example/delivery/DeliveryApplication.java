@@ -1,7 +1,5 @@
 package com.example.delivery;
 
-import com.example.delivery.services.RestaurantService;
-import com.example.delivery.services.TagService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,15 +13,8 @@ public class DeliveryApplication {
     }
 
     @Bean
-    public CommandLineRunner initial(
-            TagService tagService,
-            RestaurantService restaurantService
-    ) {
-        return (args) -> {
-//            restaurantService.deleteAllRestaurants();
-//            final Restaurant restaurant = restaurantService.createRestaurantFromForm(RestaurantForm.fromMock());
-//            tagService.addRestaurantTag(restaurant.id().orElse(0L), RestaurantTag.STREET_FOOD);
-        };
+    public CommandLineRunner initial() {
+        return (args) -> {};
     }
 
 }

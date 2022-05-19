@@ -1,7 +1,6 @@
 package com.example.delivery.entities;
 
 import com.example.delivery.forms.RestaurantForm;
-import com.example.delivery.models.Restaurant;
 import com.example.delivery.models.RestaurantTag;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,8 +8,9 @@ import lombok.Setter;
 import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -42,62 +42,51 @@ public class RestaurantEntity {
     private Double ratingScroll;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
-    private List<FoodEntity> foods;
+    private List<FoodEntity> foods = new ArrayList<>();
+
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "restaurant_tag",
+            joinColumns = @JoinColumn(name = "restaurant_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+
+    )
+    private Set<TagEntity> tags = new HashSet<>();
 
     public static RestaurantEntity of(
             Long id,
             String name,
             Double latitude,
             Double longitude,
-            RestaurantTag type,
-            Double ratingScroll,
-            List<FoodEntity> foods
+            Double ratingScroll
     ) {
         final RestaurantEntity entity = new RestaurantEntity();
         entity.setId(id);
         entity.setName(name);
         entity.setLatitude(latitude);
         entity.setLongitude(longitude);
-        entity.setTag(type);
         entity.setRatingScroll(ratingScroll);
-        entity.setFoods(foods);
-
-        return entity;
-    }
-
-    public static RestaurantEntity fromModel(Restaurant restaurant) {
-        final RestaurantEntity entity = RestaurantEntity.of(
-                null,
-                checkNotNull(restaurant.name()),
-                checkNotNull(restaurant.location().latitude()),
-                checkNotNull(restaurant.location().longitude()),
-                // TODO: Set tags
-                checkNotNull(restaurant.tags().get(0)),
-                restaurant.ratingScroll().orElse(null),
-                checkNotNull(restaurant.foods())
-                        .stream()
-                        .map(FoodEntity::fromModel)
-                        .collect(Collectors.toList())
-        );
-
-        entity.foods.forEach(food -> food.setRestaurant(entity));
 
         return entity;
     }
 
     public static RestaurantEntity fromForm(RestaurantForm form) {
-        final RestaurantEntity entity = RestaurantEntity.of(
+        return RestaurantEntity.of(
                 null,
                 checkNotNull(form.name()),
                 checkNotNull(form.location().latitude()),
                 checkNotNull(form.location().longitude()),
-                null,
-                null,
-                new ArrayList<>()
+                null
         );
+    }
 
-        entity.foods.forEach(food -> food.setRestaurant(entity));
+    public void addTag(TagEntity tag) {
+        tags.add(tag);
+        tag.getRestaurants().add(this);
+    }
 
-        return entity;
+    public void addFood(FoodEntity food) {
+        foods.add(food);
+        food.setRestaurant(this);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.delivery.controllers;
 
+import com.example.delivery.ConstantMessages;
 import com.example.delivery.forms.RestaurantForm;
 import com.example.delivery.models.Food;
 import com.example.delivery.models.Restaurant;
@@ -39,6 +40,6 @@ public class RestaurantController {
     @DeleteMapping("/restaurants/{id}")
     public OkResponse<String> deleteRestaurant(@PathVariable Long id) {
         restaurantService.deleteRestaurantById(id);
-        return OkResponse.of("Success");
+        return OkResponse.of(ConstantMessages.SUCCESS);
     }
 }

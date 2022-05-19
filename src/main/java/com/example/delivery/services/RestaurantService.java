@@ -10,11 +10,11 @@ import com.example.delivery.reopositories.FoodRepositoiry;
 import com.example.delivery.reopositories.RestaurantRepository;
 import com.example.delivery.reopositories.VariousRepository;
 import com.google.common.collect.ImmutableList;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
-@Repository
+@Service
 public class RestaurantService {
 
     public RestaurantService(

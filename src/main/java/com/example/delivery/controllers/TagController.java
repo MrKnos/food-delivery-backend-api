@@ -2,13 +2,11 @@ package com.example.delivery.controllers;
 
 import com.example.delivery.ConstantMessages;
 import com.example.delivery.models.RestaurantTag;
+import com.example.delivery.presenters.GetTagsPresenter;
 import com.example.delivery.requests.AddRestaurantTagRequest;
 import com.example.delivery.responses.OkResponse;
 import com.example.delivery.services.TagService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class TagController {
@@ -26,6 +24,13 @@ public class TagController {
         final RestaurantTag _tag = tagService.getTagFromString(request.tag());
         tagService.addRestaurantTag(id, _tag);
 
-        return  OkResponse.of(ConstantMessages.SUCCESS);
+        return OkResponse.of(ConstantMessages.SUCCESS);
+    }
+
+    @GetMapping("/tags")
+    public OkResponse<GetTagsPresenter> getTags() {
+        return OkResponse.of(
+                GetTagsPresenter.from(tagService.getTags())
+        );
     }
 }

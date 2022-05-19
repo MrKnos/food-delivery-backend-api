@@ -7,10 +7,12 @@ import com.example.delivery.exceptions.UnknownTagException;
 import com.example.delivery.models.RestaurantTag;
 import com.example.delivery.reopositories.RestaurantRepository;
 import com.example.delivery.reopositories.TagRepository;
+import com.google.common.collect.ImmutableList;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TagService {
@@ -25,6 +27,14 @@ public class TagService {
 
     RestaurantRepository restaurantRepository;
     TagRepository tagRepository;
+
+    public ImmutableList<RestaurantTag> getTags() {
+        return ImmutableList.copyOf(
+                tagRepository.findAll()
+                        .stream().map(RestaurantTag::fromEntity)
+                        .collect(Collectors.toList())
+        );
+    }
 
     @Transactional
     public void addRestaurantTag(Long restaurantId, RestaurantTag tag) {

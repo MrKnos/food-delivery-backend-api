@@ -1,8 +1,10 @@
 package com.example.delivery.models;
 
 import com.example.delivery.entities.FoodEntity;
+import com.example.delivery.forms.food.FoodForm;
 import com.google.common.collect.ImmutableList;
 
+import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.Optional;
 import java.util.Random;
@@ -18,29 +20,31 @@ public record Food(
         Optional<Double> originalPrice,
         ImmutableList<FoodOption> options
 ) {
-    public Food(
-            Optional<Long> id,
+    public static Food of(
+            @Nullable Long id,
             String name,
             String description,
             Double price,
-            Optional<Double> originalPrice,
+            @Nullable Double originalPrice,
             ImmutableList<FoodOption> options
     ) {
-        this.id = id;
-        this.name = checkNotNull(name);
-        this.description = checkNotNull(description);
-        this.price = checkNotNull(price);
-        this.originalPrice = originalPrice;
-        this.options = checkNotNull(options);
+        return new Food(
+                Optional.ofNullable(id),
+                checkNotNull(name),
+                checkNotNull(description),
+                checkNotNull(price),
+                Optional.ofNullable(originalPrice),
+                checkNotNull(options)
+        );
     }
 
     public static Food fromEntity(FoodEntity entity) {
-        return new Food(
-                Optional.of(entity.getId()),
+        return Food.of(
+                entity.getId(),
                 checkNotNull(entity.getName()),
                 checkNotNull(entity.getDescription()),
                 checkNotNull(entity.getPrice()),
-                Optional.ofNullable(entity.getOriginalPrice()),
+                entity.getOriginalPrice(),
                 ImmutableList.copyOf(
                         entity.getOptions()
                                 .stream()
@@ -50,11 +54,26 @@ public record Food(
         );
     }
 
+    public static Food fromForm(FoodForm form) {
+        return Food.of(
+                null,
+                form.name(),
+                form.description(),
+                form.price(),
+                form.originalPrice().orElse(null),
+                ImmutableList.copyOf(
+                        form.options()
+                                .stream().map(FoodOption::fromForm)
+                                .toList()
+                )
+        );
+    }
+
     public static Food fromMock() {
         final Double randomPrice = randomPrice();
 
         return new Food(
-                Optional.empty(),
+                null,
                 "Tom Yum",
                 "Thai spicy soup",
                 randomPrice,

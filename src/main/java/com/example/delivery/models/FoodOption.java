@@ -1,6 +1,7 @@
 package com.example.delivery.models;
 
 import com.example.delivery.entities.FoodOptionEntity;
+import com.example.delivery.forms.food.FoodOptionForm;
 import com.google.common.collect.ImmutableList;
 
 import java.util.stream.Collectors;
@@ -12,18 +13,20 @@ public record FoodOption(
         OptionSelectionType type,
         ImmutableList<Various> various
 ) {
-    public FoodOption(
+    public static FoodOption of(
             String name,
             OptionSelectionType type,
             ImmutableList<Various> various
     ) {
-        this.name = checkNotNull(name);
-        this.type = checkNotNull(type);
-        this.various = checkNotNull(various);
+        return new FoodOption(
+                checkNotNull(name),
+                checkNotNull(type),
+                checkNotNull(various)
+        );
     }
 
     public static FoodOption fromMock() {
-        return new FoodOption(
+        return FoodOption.of(
                 "Meat tags",
                 OptionSelectionType.SINGLE,
                 ImmutableList.of(Various.fromMock())
@@ -31,7 +34,7 @@ public record FoodOption(
     }
 
     public static FoodOption fromEntity(FoodOptionEntity entity) {
-        return new FoodOption(
+        return FoodOption.of(
                 entity.getName(),
                 entity.getSelectionType(),
                 ImmutableList.copyOf(
@@ -39,6 +42,18 @@ public record FoodOption(
                                 .stream()
                                 .map(Various::fromEntity)
                                 .collect(Collectors.toList())
+                )
+        );
+    }
+
+    public static FoodOption fromForm(FoodOptionForm form) {
+        return FoodOption.of(
+                form.name(),
+                form.type(),
+                ImmutableList.copyOf(
+                        form.various()
+                                .stream().map(Various::fromForm)
+                                .toList()
                 )
         );
     }

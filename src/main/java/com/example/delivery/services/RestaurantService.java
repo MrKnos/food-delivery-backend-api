@@ -1,5 +1,6 @@
 package com.example.delivery.services;
 
+import com.example.delivery.entities.FoodEntity;
 import com.example.delivery.entities.RestaurantEntity;
 import com.example.delivery.exceptions.RestaurantNotFoundException;
 import com.example.delivery.forms.RestaurantForm;
@@ -14,6 +15,7 @@ import com.example.delivery.requests.RestaurantPredicateRequest;
 import com.google.common.collect.ImmutableList;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,6 +70,23 @@ public class RestaurantService {
         return ImmutableList.copyOf(
                 getRestaurantById(restaurantId).foods()
         );
+    }
+
+    public void addFoods(
+            Long restaurantId,
+            ImmutableList<Food> foods
+    ) {
+        final RestaurantEntity restaurant = restaurantRepository
+                .findById(restaurantId)
+                .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
+
+        final List<FoodEntity> foodEntities = foods
+                .stream().map(FoodEntity::fromModel)
+                .toList();
+
+        foodEntities.forEach(food -> food.setRestaurant(restaurant));
+
+        foodRepositoiry.saveAll(foodEntities);
     }
 
     public void deleteAllRestaurants() {

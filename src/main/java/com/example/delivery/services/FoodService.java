@@ -21,6 +21,10 @@ public class FoodService {
     }
 
     public void deleteFoodById(Long id) {
+        if (!foodRepository.existsById(id)) {
+            throw new FoodNotFoundException(id);
+        }
+
         foodRepository.deleteById(id);
     }
 }

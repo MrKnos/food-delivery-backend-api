@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -49,7 +48,7 @@ public record Food(
                         entity.getOptions()
                                 .stream()
                                 .map(FoodOption::fromEntity)
-                                .collect(Collectors.toList())
+                                .toList()
                 )
         );
     }

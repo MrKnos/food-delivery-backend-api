@@ -16,7 +16,6 @@ import com.google.common.collect.ImmutableList;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class RestaurantService {
@@ -43,7 +42,7 @@ public class RestaurantService {
                 restaurantRepository.findAll()
                         .stream()
                         .map(Restaurant::fromEntity)
-                        .collect(Collectors.toList())
+                        .toList()
         );
     }
 
@@ -55,7 +54,7 @@ public class RestaurantService {
         return ImmutableList.copyOf(
                 getRestaurants()
                         .stream().filter(restaurant -> restaurant.predicate(_predicate))
-                        .collect(Collectors.toList())
+                        .toList()
         );
     }
 

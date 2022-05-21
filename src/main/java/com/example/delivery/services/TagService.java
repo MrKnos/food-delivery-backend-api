@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class TagService {
@@ -32,7 +31,7 @@ public class TagService {
         return ImmutableList.copyOf(
                 tagRepository.findAll()
                         .stream().map(RestaurantTag::fromEntity)
-                        .collect(Collectors.toList())
+                        .toList()
         );
     }
 

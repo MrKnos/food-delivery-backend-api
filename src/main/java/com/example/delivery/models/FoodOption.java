@@ -4,8 +4,6 @@ import com.example.delivery.entities.FoodOptionEntity;
 import com.example.delivery.forms.food.FoodOptionForm;
 import com.google.common.collect.ImmutableList;
 
-import java.util.stream.Collectors;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public record FoodOption(
@@ -41,7 +39,7 @@ public record FoodOption(
                         checkNotNull(entity.getVarious())
                                 .stream()
                                 .map(Various::fromEntity)
-                                .collect(Collectors.toList())
+                                .toList()
                 )
         );
     }

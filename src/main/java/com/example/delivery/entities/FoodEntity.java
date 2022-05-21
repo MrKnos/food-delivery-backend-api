@@ -7,7 +7,6 @@ import lombok.Setter;
 import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -75,7 +74,7 @@ public class FoodEntity {
                 checkNotNull(food.options())
                         .stream()
                         .map(FoodOptionEntity::fromModel)
-                        .collect(Collectors.toList())
+                        .toList()
         );
 
         entity.options.forEach(option -> option.setFood(entity));

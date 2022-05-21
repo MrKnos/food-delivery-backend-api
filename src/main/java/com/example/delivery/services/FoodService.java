@@ -20,4 +20,7 @@ public class FoodService {
                 .orElseThrow(() -> new FoodNotFoundException(id));
     }
 
+    public void deleteFoodById(Long id) {
+        foodRepositoiry.deleteById(id);
+    }
 }

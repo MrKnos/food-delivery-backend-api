@@ -85,4 +85,10 @@ public class RestaurantController {
         restaurantService.deleteRestaurantById(id);
         return OkResponse.of(ConstantMessages.SUCCESS);
     }
+
+    @DeleteMapping("/{id}/foods")
+    public OkResponse<String> deleteFoodsInRestaurant(@PathVariable Long id) {
+        restaurantService.deleteFoodsInRestaurant(id);
+        return OkResponse.of(ConstantMessages.SUCCESS);
+    }
 }

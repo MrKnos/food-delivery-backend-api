@@ -8,13 +8,14 @@ import com.example.delivery.models.Food;
 import com.example.delivery.models.Restaurant;
 import com.example.delivery.models.RestaurantPredicate;
 import com.example.delivery.reopositories.FoodOptionRepository;
-import com.example.delivery.reopositories.FoodRepositoiry;
+import com.example.delivery.reopositories.FoodRepository;
 import com.example.delivery.reopositories.RestaurantRepository;
 import com.example.delivery.reopositories.VariousRepository;
 import com.example.delivery.requests.RestaurantPredicateRequest;
 import com.google.common.collect.ImmutableList;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -22,18 +23,18 @@ public class RestaurantService {
 
     public RestaurantService(
             RestaurantRepository restaurantRepository,
-            FoodRepositoiry foodRepositoiry,
+            FoodRepository foodRepository,
             FoodOptionRepository foodOptionRepository,
             VariousRepository variousRepository
     ) {
         this.restaurantRepository = restaurantRepository;
-        this.foodRepositoiry = foodRepositoiry;
+        this.foodRepository = foodRepository;
         this.foodOptionRepository = foodOptionRepository;
         this.variousRepository = variousRepository;
     }
 
     RestaurantRepository restaurantRepository;
-    FoodRepositoiry foodRepositoiry;
+    FoodRepository foodRepository;
     FoodOptionRepository foodOptionRepository;
     VariousRepository variousRepository;
 
@@ -85,7 +86,7 @@ public class RestaurantService {
 
         foodEntities.forEach(food -> food.setRestaurant(restaurant));
 
-        foodRepositoiry.saveAll(foodEntities);
+        foodRepository.saveAll(foodEntities);
     }
 
     public void deleteAllRestaurants() {
@@ -98,6 +99,17 @@ public class RestaurantService {
         }
 
         restaurantRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteFoodsInRestaurant(Long id) {
+        if (!restaurantRepository.existsById(id)) {
+            throw new RestaurantNotFoundException(id);
+
+        }
+
+        foodRepository.deleteByRestaurantId(id);
+
     }
 
     public Restaurant createRestaurantFromForm(RestaurantForm form) {

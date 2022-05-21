@@ -2,25 +2,25 @@ package com.example.delivery.services;
 
 import com.example.delivery.exceptions.FoodNotFoundException;
 import com.example.delivery.models.Food;
-import com.example.delivery.reopositories.FoodRepositoiry;
+import com.example.delivery.reopositories.FoodRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FoodService {
 
-    public FoodService(FoodRepositoiry foodRepositoiry) {
-        this.foodRepositoiry = foodRepositoiry;
+    public FoodService(FoodRepository foodRepository) {
+        this.foodRepository = foodRepository;
     }
 
-    public FoodRepositoiry foodRepositoiry;
+    public FoodRepository foodRepository;
 
     public Food getFoodById(Long id) {
-        return foodRepositoiry.findById(id)
+        return foodRepository.findById(id)
                 .map(Food::fromEntity)
                 .orElseThrow(() -> new FoodNotFoundException(id));
     }
 
     public void deleteFoodById(Long id) {
-        foodRepositoiry.deleteById(id);
+        foodRepository.deleteById(id);
     }
 }

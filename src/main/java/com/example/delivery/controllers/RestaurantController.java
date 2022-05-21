@@ -4,6 +4,8 @@ import com.example.delivery.ConstantMessages;
 import com.example.delivery.forms.RestaurantForm;
 import com.example.delivery.models.Food;
 import com.example.delivery.models.Restaurant;
+import com.example.delivery.models.RestaurantTag;
+import com.example.delivery.requests.AddRestaurantTagRequest;
 import com.example.delivery.requests.RestaurantPredicateRequest;
 import com.example.delivery.responses.OkResponse;
 import com.example.delivery.services.RestaurantService;
@@ -50,6 +52,17 @@ public class RestaurantController {
             @RequestBody RestaurantPredicateRequest predicate
     ) {
        return OkResponse.of(restaurantService.filterRestaurants(predicate));
+    }
+
+    @PostMapping("/{id}/tags")
+    public OkResponse<String> addRestaurantTag(
+            @PathVariable Long id,
+            @RequestBody AddRestaurantTagRequest request
+    ) {
+        final RestaurantTag _tag = tagService.getTagFromString(request.tag());
+        tagService.addRestaurantTag(id, _tag);
+
+        return OkResponse.of(ConstantMessages.SUCCESS);
     }
 
     @DeleteMapping("/{id}")

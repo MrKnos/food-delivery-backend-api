@@ -5,6 +5,7 @@ import com.example.delivery.forms.RestaurantForm;
 import com.example.delivery.models.Food;
 import com.example.delivery.models.Restaurant;
 import com.example.delivery.models.RestaurantTag;
+import com.example.delivery.requests.AddFoodsRequest;
 import com.example.delivery.requests.AddRestaurantTagRequest;
 import com.example.delivery.requests.RestaurantPredicateRequest;
 import com.example.delivery.responses.OkResponse;
@@ -62,6 +63,20 @@ public class RestaurantController {
         final RestaurantTag _tag = tagService.getTagFromString(request.tag());
         tagService.addRestaurantTag(id, _tag);
 
+        return OkResponse.of(ConstantMessages.SUCCESS);
+    }
+
+    @PostMapping("/{id}/foods")
+    public OkResponse<String> addFoods(
+            @PathVariable Long id,
+            @RequestBody AddFoodsRequest request
+    ) {
+        restaurantService.addFoods(
+                id,
+                ImmutableList.copyOf(
+                        request.foods().stream().map(Food::fromForm).toList()
+                )
+        );
         return OkResponse.of(ConstantMessages.SUCCESS);
     }
 

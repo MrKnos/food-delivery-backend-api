@@ -1,13 +1,17 @@
 package com.example.delivery.models;
 
 import com.example.delivery.entities.VariousEntity;
+import com.example.delivery.forms.food.VariousForm;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public record Various(String name, Double price) {
-    public Various(String name, Double price) {
-        this.name = checkNotNull(name);
-        this.price = checkNotNull(price);
+
+    public static Various of(String name, Double price) {
+        return new Various(
+                checkNotNull(name),
+                checkNotNull(price)
+        );
     }
 
     public static Various fromMock() {
@@ -22,5 +26,9 @@ public record Various(String name, Double price) {
                 checkNotNull(entity.getName()),
                 checkNotNull(entity.getPrice())
         );
+    }
+
+    public static Various fromForm(VariousForm form) {
+        return Various.of(form.name(), form.price());
     }
 }

@@ -4,7 +4,6 @@ import com.example.delivery.entities.RestaurantEntity;
 import com.google.common.collect.ImmutableList;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -41,14 +40,14 @@ public record Restaurant(
                 ImmutableList.copyOf(
                         entity.getTags()
                                 .stream().map(RestaurantTag::fromEntity)
-                                .collect(Collectors.toList())
+                                .toList()
                 ),
                 Optional.ofNullable(entity.getRatingScroll()),
                 ImmutableList.copyOf(
                         entity.getFoods()
                                 .stream()
                                 .map(Food::fromEntity)
-                                .collect(Collectors.toList())
+                                .toList()
                 )
         );
     }

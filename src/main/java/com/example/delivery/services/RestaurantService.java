@@ -1,5 +1,6 @@
 package com.example.delivery.services;
 
+import com.example.delivery.entities.FoodEntity;
 import com.example.delivery.entities.RestaurantEntity;
 import com.example.delivery.exceptions.RestaurantNotFoundException;
 import com.example.delivery.forms.RestaurantForm;
@@ -14,7 +15,7 @@ import com.example.delivery.requests.RestaurantPredicateRequest;
 import com.google.common.collect.ImmutableList;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Service
 public class RestaurantService {
@@ -41,7 +42,7 @@ public class RestaurantService {
                 restaurantRepository.findAll()
                         .stream()
                         .map(Restaurant::fromEntity)
-                        .collect(Collectors.toList())
+                        .toList()
         );
     }
 
@@ -53,7 +54,7 @@ public class RestaurantService {
         return ImmutableList.copyOf(
                 getRestaurants()
                         .stream().filter(restaurant -> restaurant.predicate(_predicate))
-                        .collect(Collectors.toList())
+                        .toList()
         );
     }
 
@@ -68,6 +69,23 @@ public class RestaurantService {
         return ImmutableList.copyOf(
                 getRestaurantById(restaurantId).foods()
         );
+    }
+
+    public void addFoods(
+            Long restaurantId,
+            ImmutableList<Food> foods
+    ) {
+        final RestaurantEntity restaurant = restaurantRepository
+                .findById(restaurantId)
+                .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
+
+        final List<FoodEntity> foodEntities = foods
+                .stream().map(FoodEntity::fromModel)
+                .toList();
+
+        foodEntities.forEach(food -> food.setRestaurant(restaurant));
+
+        foodRepositoiry.saveAll(foodEntities);
     }
 
     public void deleteAllRestaurants() {

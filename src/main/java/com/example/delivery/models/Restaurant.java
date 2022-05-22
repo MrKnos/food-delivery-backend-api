@@ -21,7 +21,7 @@ public record Restaurant(
                 Optional.empty(),
                 "Knos",
                 new Location(1234.0, 4321.0),
-                ImmutableList.of(),
+                ImmutableList.of(OfficeHours.fromMock()),
                 ImmutableList.of(RestaurantTag.STREET_FOOD),
                 Optional.of(80.0),
                 ImmutableList.of(Food.fromMock())
@@ -36,7 +36,11 @@ public record Restaurant(
                         checkNotNull(entity.getLatitude()),
                         checkNotNull(entity.getLongitude())
                 ),
-                ImmutableList.of(),
+                ImmutableList.copyOf(
+                        entity.getOfficeHours()
+                                .stream().map(OfficeHours::fromEntity)
+                                .toList()
+                ),
                 ImmutableList.copyOf(
                         entity.getTags()
                                 .stream().map(RestaurantTag::fromEntity)

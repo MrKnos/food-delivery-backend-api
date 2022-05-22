@@ -1,16 +1,15 @@
 package com.example.delivery.services;
 
 import com.example.delivery.entities.FoodEntity;
+import com.example.delivery.entities.OfficeHoursEntity;
 import com.example.delivery.entities.RestaurantEntity;
 import com.example.delivery.exceptions.data_not_found.RestaurantNotFoundException;
 import com.example.delivery.forms.RestaurantForm;
 import com.example.delivery.models.Food;
+import com.example.delivery.models.OfficeHours;
 import com.example.delivery.models.Restaurant;
 import com.example.delivery.models.RestaurantPredicate;
-import com.example.delivery.reopositories.FoodOptionRepository;
-import com.example.delivery.reopositories.FoodRepository;
-import com.example.delivery.reopositories.RestaurantRepository;
-import com.example.delivery.reopositories.VariousRepository;
+import com.example.delivery.reopositories.*;
 import com.example.delivery.requests.RestaurantPredicateRequest;
 import com.google.common.collect.ImmutableList;
 import org.springframework.stereotype.Service;
@@ -25,18 +24,21 @@ public class RestaurantService {
             RestaurantRepository restaurantRepository,
             FoodRepository foodRepository,
             FoodOptionRepository foodOptionRepository,
-            VariousRepository variousRepository
+            VariousRepository variousRepository,
+            OfficeHoursRepository officeHoursRepository
     ) {
         this.restaurantRepository = restaurantRepository;
         this.foodRepository = foodRepository;
         this.foodOptionRepository = foodOptionRepository;
         this.variousRepository = variousRepository;
+        this.officeHoursRepository = officeHoursRepository;
     }
 
     RestaurantRepository restaurantRepository;
     FoodRepository foodRepository;
     FoodOptionRepository foodOptionRepository;
     VariousRepository variousRepository;
+    OfficeHoursRepository officeHoursRepository;
 
     public ImmutableList<Restaurant> getRestaurants() {
         return ImmutableList.copyOf(
@@ -45,6 +47,12 @@ public class RestaurantService {
                         .map(Restaurant::fromEntity)
                         .toList()
         );
+    }
+
+    RestaurantEntity getRestaurantEntityById(Long id) {
+        return restaurantRepository
+                .findById(id)
+                .orElseThrow(() -> new RestaurantNotFoundException(id));
     }
 
     public ImmutableList<Restaurant> filterRestaurants(
@@ -87,6 +95,19 @@ public class RestaurantService {
         foodEntities.forEach(food -> food.setRestaurant(restaurant));
 
         foodRepository.saveAll(foodEntities);
+    }
+
+    public void addOfficeHours(
+            Long restaurantId,
+            ImmutableList<OfficeHours> officeHours
+    ) {
+        final RestaurantEntity restaurant = getRestaurantEntityById(restaurantId);
+        final List<OfficeHoursEntity> entities = officeHours
+                .stream().map(OfficeHoursEntity::fromModel)
+                .toList();
+
+        entities.forEach(entity -> entity.setRestaurant(restaurant));
+        officeHoursRepository.saveAll(entities);
     }
 
     public void deleteAllRestaurants() {

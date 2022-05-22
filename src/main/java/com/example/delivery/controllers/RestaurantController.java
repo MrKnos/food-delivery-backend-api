@@ -6,6 +6,7 @@ import com.example.delivery.models.Food;
 import com.example.delivery.models.Restaurant;
 import com.example.delivery.models.RestaurantTag;
 import com.example.delivery.requests.AddFoodsRequest;
+import com.example.delivery.requests.AddOfficeHoursRequest;
 import com.example.delivery.requests.AddRestaurantTagRequest;
 import com.example.delivery.requests.RestaurantPredicateRequest;
 import com.example.delivery.responses.OkResponse;
@@ -52,7 +53,7 @@ public class RestaurantController {
     public OkResponse<ImmutableList<Restaurant>> filterRestaurants(
             @RequestBody RestaurantPredicateRequest predicate
     ) {
-       return OkResponse.of(restaurantService.filterRestaurants(predicate));
+        return OkResponse.of(restaurantService.filterRestaurants(predicate));
     }
 
     @PostMapping("/{id}/tags")
@@ -77,6 +78,19 @@ public class RestaurantController {
                         request.foods().stream().map(Food::fromForm).toList()
                 )
         );
+        return OkResponse.of(ConstantMessages.SUCCESS);
+    }
+
+    @PostMapping("/{id}/office_hours")
+    public OkResponse<String> addOfficeHours(
+            @PathVariable Long id,
+            @RequestBody AddOfficeHoursRequest request
+    ) {
+        restaurantService.addOfficeHours(
+                id,
+                ImmutableList.copyOf(request.officeHours())
+        );
+
         return OkResponse.of(ConstantMessages.SUCCESS);
     }
 

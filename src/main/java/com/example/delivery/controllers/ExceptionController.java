@@ -1,7 +1,7 @@
 package com.example.delivery.controllers;
 
-import com.example.delivery.exceptions.DataNotFoundException;
 import com.example.delivery.exceptions.UnknownTagException;
+import com.example.delivery.exceptions.data_not_found.DataNotFoundException;
 import com.example.delivery.responses.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

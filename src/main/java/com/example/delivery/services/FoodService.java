@@ -2,7 +2,8 @@ package com.example.delivery.services;
 
 import com.example.delivery.entities.FoodEntity;
 import com.example.delivery.entities.FoodOptionEntity;
-import com.example.delivery.exceptions.FoodNotFoundException;
+import com.example.delivery.exceptions.data_not_found.FoodNotFoundException;
+import com.example.delivery.exceptions.data_not_found.FoodOptionNotFoundException;
 import com.example.delivery.models.Food;
 import com.example.delivery.models.FoodOption;
 import com.example.delivery.reopositories.FoodOptionRepository;
@@ -54,5 +55,13 @@ public class FoodService {
 
         optionEntities.forEach(option -> option.setFood(food));
         optionRepository.saveAll(optionEntities);
+    }
+
+    public void deleteFoodOptionById(Long id) {
+        if (!optionRepository.existsById(id)) {
+            throw new FoodOptionNotFoundException(id);
+        }
+
+        optionRepository.deleteById(id);
     }
 }

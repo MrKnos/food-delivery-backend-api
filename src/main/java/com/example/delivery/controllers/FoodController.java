@@ -45,4 +45,10 @@ public class FoodController {
         );
         return OkResponse.of(ConstantMessages.SUCCESS);
     }
+
+    @DeleteMapping("/options/{id}")
+    public OkResponse<String> deleteFoodOptionById(@PathVariable Long id) {
+        foodService.deleteFoodOptionById(id);
+        return OkResponse.of(ConstantMessages.SUCCESS);
+    }
 }

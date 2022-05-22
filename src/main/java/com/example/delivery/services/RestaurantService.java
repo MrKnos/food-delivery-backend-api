@@ -2,7 +2,7 @@ package com.example.delivery.services;
 
 import com.example.delivery.entities.FoodEntity;
 import com.example.delivery.entities.RestaurantEntity;
-import com.example.delivery.exceptions.RestaurantNotFoundException;
+import com.example.delivery.exceptions.data_not_found.RestaurantNotFoundException;
 import com.example.delivery.forms.RestaurantForm;
 import com.example.delivery.models.Food;
 import com.example.delivery.models.Restaurant;

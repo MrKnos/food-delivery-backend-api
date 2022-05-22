@@ -2,8 +2,8 @@ package com.example.delivery.services;
 
 import com.example.delivery.entities.RestaurantEntity;
 import com.example.delivery.entities.TagEntity;
-import com.example.delivery.exceptions.RestaurantNotFoundException;
 import com.example.delivery.exceptions.UnknownTagException;
+import com.example.delivery.exceptions.data_not_found.RestaurantNotFoundException;
 import com.example.delivery.models.RestaurantTag;
 import com.example.delivery.reopositories.RestaurantRepository;
 import com.example.delivery.reopositories.TagRepository;

@@ -1,4 +1,4 @@
-package com.example.delivery.exceptions;
+package com.example.delivery.exceptions.data_not_found;
 
 public class DataNotFoundException extends RuntimeException {
 

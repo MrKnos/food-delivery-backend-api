@@ -42,6 +42,9 @@ public class RestaurantEntity {
     private Double ratingScroll;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<OfficeHoursEntity> officeHours = new ArrayList<>();
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<FoodEntity> foods = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)

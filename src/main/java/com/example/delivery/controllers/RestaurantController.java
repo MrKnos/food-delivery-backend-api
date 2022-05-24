@@ -2,7 +2,9 @@ package com.example.delivery.controllers;
 
 import com.example.delivery.ConstantMessages;
 import com.example.delivery.forms.RestaurantForm;
+import com.example.delivery.forms.RestaurantOfficeHoursForm;
 import com.example.delivery.models.Food;
+import com.example.delivery.models.OfficeHours;
 import com.example.delivery.models.Restaurant;
 import com.example.delivery.models.RestaurantTag;
 import com.example.delivery.requests.AddFoodsRequest;
@@ -80,6 +82,7 @@ public class RestaurantController {
                         request.foods().stream().map(Food::fromForm).toList()
                 )
         );
+
         return OkResponse.of(ConstantMessages.SUCCESS);
     }
 
@@ -93,6 +96,15 @@ public class RestaurantController {
                 ImmutableList.copyOf(request.officeHours())
         );
 
+        return OkResponse.of(ConstantMessages.SUCCESS);
+    }
+
+    @PutMapping("/{id}/office_hours")
+    public OkResponse<String> updateOfficeHours(
+            @PathVariable Long id,
+            @RequestBody RestaurantOfficeHoursForm form
+    ) {
+        restaurantService.updateOfficeHours(id, OfficeHours.fromForm(form));
         return OkResponse.of(ConstantMessages.SUCCESS);
     }
 

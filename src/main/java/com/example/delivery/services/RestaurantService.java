@@ -112,6 +112,21 @@ public class RestaurantService {
         officeHoursRepository.saveAll(entities);
     }
 
+    public void updateOfficeHours(
+            Long restaurantId,
+            OfficeHours officeHours
+    ) {
+        final OfficeHoursEntity entity = officeHoursRepository.findByRestaurantIdAndDay(
+                restaurantId,
+                officeHours.day().name()
+        ).orElseThrow(() -> new OfficeHoursNotFoundException(restaurantId, officeHours.day()));
+
+        entity.setOpen(officeHours.open());
+        entity.setClose(officeHours.close());
+
+        officeHoursRepository.save(entity);
+    }
+
     public void deleteAllRestaurants() {
         restaurantRepository.deleteAll();
     }

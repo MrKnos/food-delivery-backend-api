@@ -1,6 +1,7 @@
 package com.example.delivery.models;
 
 import com.example.delivery.entities.OfficeHoursEntity;
+import com.example.delivery.forms.RestaurantOfficeHoursForm;
 
 import javax.annotation.Nullable;
 import java.time.DayOfWeek;
@@ -44,6 +45,15 @@ public record OfficeHours(
                 DayOfWeek.valueOf(entity.getDay()),
                 entity.getOpen(),
                 entity.getClose()
+        );
+    }
+
+    public static OfficeHours fromForm(RestaurantOfficeHoursForm form) {
+        return  OfficeHours.of(
+                null,
+                DayOfWeek.valueOf(form.day().toUpperCase()),
+                form.open(),
+                form.close()
         );
     }
 

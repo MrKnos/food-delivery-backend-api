@@ -15,6 +15,8 @@ import com.example.delivery.services.TagService;
 import com.google.common.collect.ImmutableList;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
+
 @RestController
 @RequestMapping("/restaurants")
 public class RestaurantController {
@@ -103,6 +105,15 @@ public class RestaurantController {
     @DeleteMapping("/{id}/foods")
     public OkResponse<String> deleteFoodsInRestaurant(@PathVariable Long id) {
         restaurantService.deleteFoodsInRestaurant(id);
+        return OkResponse.of(ConstantMessages.SUCCESS);
+    }
+
+    @DeleteMapping("/{id}/office_hours/{day}")
+    public OkResponse<String> deleteRestaurantOfficeHours(
+            @PathVariable Long id,
+            @PathVariable String day
+    ) {
+        restaurantService.deleteRestaurantOfficeHour(id, DayOfWeek.valueOf(day.toUpperCase()));
         return OkResponse.of(ConstantMessages.SUCCESS);
     }
 }

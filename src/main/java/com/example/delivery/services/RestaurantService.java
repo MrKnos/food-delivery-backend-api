@@ -3,6 +3,7 @@ package com.example.delivery.services;
 import com.example.delivery.entities.FoodEntity;
 import com.example.delivery.entities.OfficeHoursEntity;
 import com.example.delivery.entities.RestaurantEntity;
+import com.example.delivery.exceptions.data_not_found.OfficeHoursNotFoundException;
 import com.example.delivery.exceptions.data_not_found.RestaurantNotFoundException;
 import com.example.delivery.forms.RestaurantForm;
 import com.example.delivery.models.Food;
@@ -15,6 +16,7 @@ import com.google.common.collect.ImmutableList;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.DayOfWeek;
 import java.util.List;
 
 @Service
@@ -131,6 +133,15 @@ public class RestaurantService {
 
         foodRepository.deleteByRestaurantId(id);
 
+    }
+
+    @Transactional
+    public void deleteRestaurantOfficeHour(Long restaurantId, DayOfWeek day) {
+        if (!officeHoursRepository.existsByRestaurantIdAndDay(restaurantId, day.name())) {
+            throw new OfficeHoursNotFoundException(restaurantId, day);
+        }
+
+        officeHoursRepository.deleteByRestaurantIdAndDay(restaurantId, day.name());
     }
 
     public Restaurant createRestaurantFromForm(RestaurantForm form) {

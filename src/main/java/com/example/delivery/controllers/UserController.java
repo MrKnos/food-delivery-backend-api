@@ -36,4 +36,10 @@ public class UserController {
         userService.updateUser(User.fromForm(id, from));
         return OkResponse.of(ConstantMessages.SUCCESS);
     }
+
+    @DeleteMapping("/{id}")
+    public OkResponse<String> deleteUserById(@PathVariable Long id) {
+        userService.deleteUserById(id);
+        return OkResponse.of(ConstantMessages.SUCCESS);
+    }
 }

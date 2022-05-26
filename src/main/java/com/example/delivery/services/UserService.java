@@ -35,4 +35,12 @@ public class UserService {
 
         userRepository.save(userEntity);
     }
+
+    public void deleteUserById(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException(id);
+        }
+
+        userRepository.deleteById(id);
+    }
 }

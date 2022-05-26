@@ -5,6 +5,7 @@ import com.example.delivery.forms.UserForm;
 import com.example.delivery.models.User;
 import com.example.delivery.responses.OkResponse;
 import com.example.delivery.services.UserService;
+import com.google.common.collect.ImmutableList;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +17,11 @@ public class UserController {
     }
 
     UserService userService;
+
+    @GetMapping
+    public OkResponse<ImmutableList<User>> getUsers() {
+        return OkResponse.of(ImmutableList.copyOf(userService.getAllUsers()));
+    }
 
     @GetMapping("/{id}")
     public OkResponse<User> getUserById(@PathVariable Long id) {

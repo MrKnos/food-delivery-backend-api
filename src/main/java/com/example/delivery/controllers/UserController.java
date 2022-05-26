@@ -24,7 +24,16 @@ public class UserController {
 
     @PostMapping
     public OkResponse<String> crateUser(@RequestBody UserForm form) {
-        userService.addUser(User.fromForm(form));
+        userService.addUser(User.fromForm(null, form));
+        return OkResponse.of(ConstantMessages.SUCCESS);
+    }
+
+    @PutMapping("/{id}")
+    public OkResponse<String> updateUser(
+            @PathVariable Long id,
+            @RequestBody UserForm from
+    ) {
+        userService.updateUser(User.fromForm(id, from));
         return OkResponse.of(ConstantMessages.SUCCESS);
     }
 }

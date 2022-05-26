@@ -20,10 +20,19 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        final UserEntity userEntity = userRepository
+        return User.fromEntity(getUserEntityById(id));
+    }
+
+    UserEntity getUserEntityById(Long id) {
+        return userRepository
                 .findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
+    }
 
-        return User.fromEntity(userEntity);
+    public void updateUser(User user) {
+        final UserEntity userEntity = getUserEntityById(user.id().orElse(null));
+        userEntity.updateFrom(user);
+
+        userRepository.save(userEntity);
     }
 }

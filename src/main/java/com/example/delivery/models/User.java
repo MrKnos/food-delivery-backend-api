@@ -31,9 +31,12 @@ public record User(
         );
     }
 
-    public static User fromForm(UserForm form) {
+    public static User fromForm(
+            @Nullable Long id,
+            UserForm form
+    ) {
         return User.of(
-                null,
+                id,
                 form.name()
         );
     }

@@ -37,4 +37,8 @@ public class UserEntity {
                 model.name()
         );
     }
+
+    public void updateFrom(User model) {
+        setName(model.name());
+    }
 }

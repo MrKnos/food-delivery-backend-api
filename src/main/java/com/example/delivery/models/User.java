@@ -27,7 +27,7 @@ public record User(
     public static User fromEntity(UserEntity entity) {
         return User.of(
                 entity.getId(),
-                entity.getName()
+                entity.getUsername()
         );
     }
 

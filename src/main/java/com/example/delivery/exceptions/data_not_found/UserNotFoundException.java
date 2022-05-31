@@ -6,4 +6,8 @@ public class UserNotFoundException extends DataNotFoundException {
         super(String.format("User id %s not found.", userId));
     }
 
+    public UserNotFoundException(String name) {
+        super(String.format("User name %s not found.", name));
+    }
+
 }

@@ -1,7 +1,7 @@
 package com.example.delivery.entities;
 
+import com.example.delivery.forms.CreateUserForm;
 import com.example.delivery.models.Role;
-import com.example.delivery.models.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +33,12 @@ public class UserEntity implements UserDetails {
     @Column(name = "enabled")
     private Boolean enabled;
 
-    @Column(name = "roles")
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     private Set<RoleEntity> roles = new HashSet<>();
 
     public static UserEntity of(
@@ -51,16 +56,18 @@ public class UserEntity implements UserDetails {
         return entity;
     }
 
-    public static UserEntity fromModel(User model) {
+    public static UserEntity fromForm(CreateUserForm form) {
         return UserEntity.of(
-                model.id().orElse(null),
-                model.name(),
-                "",
+                null,
+                form.username(),
+                form.password(),
                 true
         );
     }
 
-    public void updateFrom(User model) {
+    public void addRole(RoleEntity role) {
+        roles.add(role);
+        role.getUserDetails().add(this);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.example.delivery.models;
 
 import com.example.delivery.entities.UserEntity;
-import com.example.delivery.forms.UserForm;
+import com.example.delivery.forms.CreateUserForm;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -11,16 +11,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public record User(
         Optional<Long> id,
-        String name
+        String username
 ) {
 
     public static User of(
             @Nullable Long id,
-            String name
+            String username
     ) {
         return new User(
                 Optional.ofNullable(id),
-                checkNotNull(name)
+                checkNotNull(username)
         );
     }
 
@@ -33,11 +33,11 @@ public record User(
 
     public static User fromForm(
             @Nullable Long id,
-            UserForm form
+            CreateUserForm form
     ) {
         return User.of(
                 id,
-                form.name()
+                form.username()
         );
     }
 }

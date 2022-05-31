@@ -1,7 +1,7 @@
 package com.example.delivery.controllers;
 
 import com.example.delivery.ConstantMessages;
-import com.example.delivery.forms.UserForm;
+import com.example.delivery.forms.CreateUserForm;
 import com.example.delivery.models.User;
 import com.example.delivery.responses.OkResponse;
 import com.example.delivery.services.UserService;
@@ -29,15 +29,14 @@ public class UserController {
     }
 
     @PostMapping
-    public OkResponse<String> crateUser(@RequestBody UserForm form) {
-        userService.addUser(User.fromForm(null, form));
-        return OkResponse.of(ConstantMessages.SUCCESS);
+    public OkResponse<User> createUser(@RequestBody CreateUserForm form) {
+        return OkResponse.of(userService.createUser(form));
     }
 
     @PutMapping("/{id}")
     public OkResponse<String> updateUser(
             @PathVariable Long id,
-            @RequestBody UserForm from
+            @RequestBody CreateUserForm from
     ) {
         userService.updateUser(User.fromForm(id, from));
         return OkResponse.of(ConstantMessages.SUCCESS);

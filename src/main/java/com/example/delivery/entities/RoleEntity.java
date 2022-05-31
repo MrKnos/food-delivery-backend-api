@@ -1,10 +1,13 @@
 package com.example.delivery.entities;
 
+import com.example.delivery.models.Role;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -20,7 +23,14 @@ public class RoleEntity {
     @NaturalId
     private String roleName;
 
-    private static RoleEntity of(
+    @ManyToMany(
+            mappedBy = "roles",
+            cascade = CascadeType.MERGE,
+            fetch = FetchType.EAGER
+    )
+    private Set<UserEntity> userDetails = new HashSet<>();
+
+    public static RoleEntity of(
             Long id,
             String role
     ) {
@@ -29,5 +39,9 @@ public class RoleEntity {
         entity.setRoleName(role);
 
         return entity;
+    }
+
+    public static RoleEntity fromModel(Role role) {
+        return RoleEntity.of(null, role.name());
     }
 }

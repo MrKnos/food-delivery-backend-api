@@ -2,8 +2,10 @@ package com.example.delivery.services;
 
 import com.example.delivery.JwtTokenUtil;
 import com.example.delivery.entities.UserEntity;
+import com.example.delivery.exceptions.data_not_found.DataNotFoundException;
 import com.example.delivery.exceptions.data_not_found.LoginException;
 import com.example.delivery.forms.LoginForm;
+import com.example.delivery.reopositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
 
     AuthenticationManager authenticationManager;
+    UserRepository userRepository;
     JwtTokenUtil jwtTokenUtil;
 
     public String login(LoginForm form) {
@@ -22,16 +25,33 @@ public class AuthenticationService {
                 new UsernamePasswordAuthenticationToken(form.username(), form.password())
         );
 
-        Object user = authentication.getPrincipal();
+        Object maybeUser = authentication.getPrincipal();
 
-        if (user instanceof UserEntity) {
-            return jwtTokenUtil.generateAccessToken((UserEntity) user);
-        } else {
+        if (!(maybeUser instanceof final UserEntity user)) {
             throw new LoginException("Invalid User");
         }
+
+        final String accessToken = jwtTokenUtil.generateAccessToken(user);
+        saveAccessToken(accessToken, user.getId());
+
+        return jwtTokenUtil.generateAccessToken((UserEntity) maybeUser);
     }
 
     public void logout(Long userId) {
-        // TODO: Implement logout
+        final UserEntity user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new DataNotFoundException(UserEntity.class, userId));
+
+        final String accessToken = jwtTokenUtil.generateAccessToken(user);
+        saveAccessToken(accessToken, user.getId());
+    }
+
+    void saveAccessToken(String token, Long userId) {
+        final UserEntity user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new DataNotFoundException(UserEntity.class, userId));
+
+        user.setAccessToken(token);
+        userRepository.save(user);
     }
 }

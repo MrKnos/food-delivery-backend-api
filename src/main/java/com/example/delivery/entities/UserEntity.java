@@ -33,6 +33,9 @@ public class UserEntity implements UserDetails {
     @Column(name = "enabled")
     private Boolean enabled;
 
+    @Column(name = "accessToken")
+    private String accessToken;
+
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",

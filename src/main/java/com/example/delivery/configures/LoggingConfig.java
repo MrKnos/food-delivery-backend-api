@@ -1,4 +1,4 @@
-package com.example.delivery;
+package com.example.delivery.configures;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

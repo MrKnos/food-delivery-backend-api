@@ -1,11 +1,11 @@
 package com.example.delivery.services;
 
-import com.example.delivery.JwtTokenUtil;
 import com.example.delivery.entities.UserEntity;
 import com.example.delivery.exceptions.data_not_found.DataNotFoundException;
 import com.example.delivery.exceptions.data_not_found.LoginException;
 import com.example.delivery.forms.LoginForm;
 import com.example.delivery.reopositories.UserRepository;
+import com.example.delivery.utilities.JwtTokenUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,7 +32,8 @@ public class AuthenticationService {
         }
 
         final String accessToken = jwtTokenUtil.generateAccessToken(user);
-        saveAccessToken(accessToken, user.getId());
+        user.setAccessToken(accessToken);
+        userRepository.save(user);
 
         return jwtTokenUtil.generateAccessToken((UserEntity) maybeUser);
     }
@@ -43,15 +44,7 @@ public class AuthenticationService {
                 .orElseThrow(() -> new DataNotFoundException(UserEntity.class, userId));
 
         final String accessToken = jwtTokenUtil.generateAccessToken(user);
-        saveAccessToken(accessToken, user.getId());
-    }
-
-    void saveAccessToken(String token, Long userId) {
-        final UserEntity user = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new DataNotFoundException(UserEntity.class, userId));
-
-        user.setAccessToken(token);
+        user.setAccessToken(accessToken);
         userRepository.save(user);
     }
 }

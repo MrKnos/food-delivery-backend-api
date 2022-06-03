@@ -1,4 +1,4 @@
-package com.example.delivery;
+package com.example.delivery.utilities;
 
 import com.example.delivery.entities.UserEntity;
 import io.jsonwebtoken.*;

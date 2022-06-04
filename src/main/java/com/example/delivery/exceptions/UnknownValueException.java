@@ -1,4 +1,4 @@
-package com.example.delivery.exceptions.data_not_found;
+package com.example.delivery.exceptions;
 
 import static java.lang.String.format;
 

@@ -1,7 +1,7 @@
 package com.example.delivery.models;
 
 import com.example.delivery.entities.RoleEntity;
-import com.example.delivery.exceptions.data_not_found.UnknownValueException;
+import com.example.delivery.exceptions.UnknownValueException;
 import com.google.common.collect.ImmutableList;
 import org.springframework.security.core.GrantedAuthority;
 

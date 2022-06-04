@@ -3,8 +3,7 @@ package com.example.delivery.services;
 import com.example.delivery.entities.FoodEntity;
 import com.example.delivery.entities.OfficeHoursEntity;
 import com.example.delivery.entities.RestaurantEntity;
-import com.example.delivery.exceptions.data_not_found.OfficeHoursNotFoundException;
-import com.example.delivery.exceptions.data_not_found.RestaurantNotFoundException;
+import com.example.delivery.exceptions.DataNotFoundException;
 import com.example.delivery.forms.RestaurantForm;
 import com.example.delivery.models.Food;
 import com.example.delivery.models.OfficeHours;
@@ -54,7 +53,7 @@ public class RestaurantService {
     RestaurantEntity getRestaurantEntityById(Long id) {
         return restaurantRepository
                 .findById(id)
-                .orElseThrow(() -> new RestaurantNotFoundException(id));
+                .orElseThrow(() -> new DataNotFoundException(RestaurantEntity.class, id));
     }
 
     public ImmutableList<Restaurant> filterRestaurants(
@@ -73,7 +72,7 @@ public class RestaurantService {
         return restaurantRepository
                 .findById(id)
                 .map(Restaurant::fromEntity)
-                .orElseThrow(() -> new RestaurantNotFoundException(id));
+                .orElseThrow(() -> new DataNotFoundException(RestaurantEntity.class, id));
     }
 
     public ImmutableList<Food> listFoodsInRestaurant(Long restaurantId) {
@@ -88,7 +87,7 @@ public class RestaurantService {
     ) {
         final RestaurantEntity restaurant = restaurantRepository
                 .findById(restaurantId)
-                .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
+                .orElseThrow(() -> new DataNotFoundException(RestaurantEntity.class, restaurantId));
 
         final List<FoodEntity> foodEntities = foods
                 .stream().map(FoodEntity::fromModel)
@@ -119,7 +118,9 @@ public class RestaurantService {
         final OfficeHoursEntity entity = officeHoursRepository.findByRestaurantIdAndDay(
                 restaurantId,
                 officeHours.day().name()
-        ).orElseThrow(() -> new OfficeHoursNotFoundException(restaurantId, officeHours.day()));
+        ).orElseThrow(() -> new DataNotFoundException(
+                OfficeHoursEntity.class, officeHours.day().name())
+        );
 
         entity.setOpen(officeHours.open());
         entity.setClose(officeHours.close());
@@ -133,7 +134,7 @@ public class RestaurantService {
 
     public void deleteRestaurantById(Long id) {
         if (!restaurantRepository.existsById(id)) {
-            throw new RestaurantNotFoundException(id);
+            throw new DataNotFoundException(RestaurantEntity.class, id);
         }
 
         restaurantRepository.deleteById(id);
@@ -142,7 +143,7 @@ public class RestaurantService {
     @Transactional
     public void deleteFoodsInRestaurant(Long id) {
         if (!restaurantRepository.existsById(id)) {
-            throw new RestaurantNotFoundException(id);
+            throw new DataNotFoundException(RestaurantEntity.class, id);
 
         }
 
@@ -153,7 +154,7 @@ public class RestaurantService {
     @Transactional
     public void deleteRestaurantOfficeHour(Long restaurantId, DayOfWeek day) {
         if (!officeHoursRepository.existsByRestaurantIdAndDay(restaurantId, day.name())) {
-            throw new OfficeHoursNotFoundException(restaurantId, day);
+            throw new DataNotFoundException(OfficeHoursEntity.class, day.name());
         }
 
         officeHoursRepository.deleteByRestaurantIdAndDay(restaurantId, day.name());

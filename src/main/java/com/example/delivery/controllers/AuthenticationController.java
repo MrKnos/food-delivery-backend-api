@@ -1,7 +1,7 @@
 package com.example.delivery.controllers;
 
 import com.example.delivery.ConstantMessages;
-import com.example.delivery.exceptions.data_not_found.DataNotFoundException;
+import com.example.delivery.exceptions.DataNotFoundException;
 import com.example.delivery.forms.LoginForm;
 import com.example.delivery.presenters.LoginPresenter;
 import com.example.delivery.responses.OkResponse;

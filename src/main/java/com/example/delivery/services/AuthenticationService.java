@@ -1,8 +1,8 @@
 package com.example.delivery.services;
 
 import com.example.delivery.entities.UserEntity;
-import com.example.delivery.exceptions.data_not_found.DataNotFoundException;
-import com.example.delivery.exceptions.data_not_found.LoginException;
+import com.example.delivery.exceptions.DataNotFoundException;
+import com.example.delivery.exceptions.LoginException;
 import com.example.delivery.forms.LoginForm;
 import com.example.delivery.reopositories.UserRepository;
 import com.example.delivery.utilities.JwtTokenUtil;

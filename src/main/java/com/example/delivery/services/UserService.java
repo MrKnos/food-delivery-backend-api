@@ -2,8 +2,8 @@ package com.example.delivery.services;
 
 import com.example.delivery.entities.RoleEntity;
 import com.example.delivery.entities.UserEntity;
-import com.example.delivery.exceptions.data_not_found.DataNotFoundException;
-import com.example.delivery.exceptions.data_not_found.UserNotFoundException;
+import com.example.delivery.exceptions.DataNotFoundException;
+import com.example.delivery.exceptions.UserNotFoundException;
 import com.example.delivery.forms.CreateUserForm;
 import com.example.delivery.models.Role;
 import com.example.delivery.models.User;

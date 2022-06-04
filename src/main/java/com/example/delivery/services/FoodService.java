@@ -2,8 +2,7 @@ package com.example.delivery.services;
 
 import com.example.delivery.entities.FoodEntity;
 import com.example.delivery.entities.FoodOptionEntity;
-import com.example.delivery.exceptions.data_not_found.FoodNotFoundException;
-import com.example.delivery.exceptions.data_not_found.FoodOptionNotFoundException;
+import com.example.delivery.exceptions.DataNotFoundException;
 import com.example.delivery.models.Food;
 import com.example.delivery.models.FoodOption;
 import com.example.delivery.reopositories.FoodOptionRepository;
@@ -30,12 +29,12 @@ public class FoodService {
     public Food getFoodById(Long id) {
         return foodRepository.findById(id)
                 .map(Food::fromEntity)
-                .orElseThrow(() -> new FoodNotFoundException(id));
+                .orElseThrow(() -> new DataNotFoundException(FoodEntity.class, id));
     }
 
     public void deleteFoodById(Long id) {
         if (!foodRepository.existsById(id)) {
-            throw new FoodNotFoundException(id);
+            throw new DataNotFoundException(Food.class, id);
         }
 
         foodRepository.deleteById(id);
@@ -47,7 +46,7 @@ public class FoodService {
     ) {
         final FoodEntity food = foodRepository
                 .findById(foodId)
-                .orElseThrow(() -> new FoodNotFoundException(foodId));
+                .orElseThrow(() -> new DataNotFoundException(FoodEntity.class, foodId));
 
         final List<FoodOptionEntity> optionEntities = options
                 .stream().map(FoodOptionEntity::fromModel)
@@ -59,7 +58,7 @@ public class FoodService {
 
     public void deleteFoodOptionById(Long id) {
         if (!optionRepository.existsById(id)) {
-            throw new FoodOptionNotFoundException(id);
+            throw new DataNotFoundException(FoodEntity.class, id);
         }
 
         optionRepository.deleteById(id);

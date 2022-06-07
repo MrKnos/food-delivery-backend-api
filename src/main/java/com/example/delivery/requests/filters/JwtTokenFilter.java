@@ -48,7 +48,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 .findById(userId)
                 .orElseThrow(() -> new DataNotFoundException(UserEntity.class, userId));
 
-        if (!user.getAccessToken().equals(token.get())) {
+        if (!user.validateAccessToken(token.get())) {
             chain.doFilter(request, response);
             return;
         }

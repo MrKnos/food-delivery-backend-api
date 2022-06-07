@@ -2,12 +2,14 @@ package com.example.delivery.entities;
 
 import com.example.delivery.forms.CreateUserForm;
 import com.example.delivery.models.Role;
+import com.google.common.hash.Hashing;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.annotation.Nullable;
 import javax.persistence.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
@@ -33,8 +35,8 @@ public class UserEntity implements UserDetails {
     @Column(name = "enabled")
     private Boolean enabled;
 
-    @Column(name = "accessToken")
-    private String accessToken;
+    @Column(name = "hashedAccessToken")
+    private String hashedAccessToken;
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
@@ -71,6 +73,16 @@ public class UserEntity implements UserDetails {
     public void addRole(RoleEntity role) {
         roles.add(role);
         role.getUserDetails().add(this);
+    }
+
+    public Boolean validateAccessToken(String token) {
+        return hash(token).equals(getHashedAccessToken());
+    }
+
+    private String hash(String message) {
+        return Hashing.sha256()
+                .hashString(message, StandardCharsets.UTF_8)
+                .toString();
     }
 
     @Override
